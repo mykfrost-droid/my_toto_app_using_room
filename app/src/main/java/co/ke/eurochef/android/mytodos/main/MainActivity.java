@@ -1,7 +1,10 @@
 package co.ke.eurochef.android.mytodos.main;
 
 import android.os.Bundle;
+import android.widget.EditText;
+
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -70,8 +73,31 @@ public class MainActivity extends AppCompatActivity {
 
         fabAddTask.setOnClickListener(v -> {
 
-            // We will add the Add Task dialog here next.
+            EditText input = new EditText(this);
 
+            input.setHint("Enter task");
+
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("Add Task")
+                    .setView(input)
+                    .setPositiveButton("Add", (dialogInterface, which) -> {
+
+                        String taskTitle = input.getText()
+                                .toString()
+                                .trim();
+
+                        if (!taskTitle.isEmpty()) {
+
+                            Task task = new Task(taskTitle);
+
+                            taskViewModel.insertTask(task);
+                        }
+
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .create();
+
+            dialog.show();
         });
     }
 }
